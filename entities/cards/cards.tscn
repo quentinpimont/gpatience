@@ -13,7 +13,7 @@ script = ExtResource("1_5fbhp")
 texture = ExtResource("2_58rhi")
 hframes = 13
 vframes = 5
-frame = 54
+frame = 52
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
