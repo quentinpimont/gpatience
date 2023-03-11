@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://g2nuhoxggfbc"]
+
+[ext_resource type="Script" path="res://entities/deck/deck.gd" id="1_2i64a"]
+[ext_resource type="Texture2D" uid="uid://bntx02mph6xsh" path="res://card_base.png" id="2_ky8bx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q8e81"]
+size = Vector2(32, 44)
+
+[node name="deck" type="Area2D"]
+script = ExtResource("1_2i64a")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ky8bx")
+hframes = 13
+vframes = 5
+
+[node name="Area2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_q8e81")
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
