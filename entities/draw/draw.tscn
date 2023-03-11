@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://cvb3wiqjkaev6"]
+[gd_scene load_steps=2 format=3 uid="uid://cvb3wiqjkaev6"]
+
+[ext_resource type="Script" path="res://entities/draw/draw.gd" id="1_puxjh"]
 
 [node name="Draw" type="Node2D"]
-position = Vector2(31, 101)
+script = ExtResource("1_puxjh")
