@@ -18,6 +18,6 @@ func cards_distribution() -> void:
 	while numberOfCards > 0:
 		var card:Cards = deck.deckList.pop_back()
 		for column in columns:
-			if column.init_place_card(card):
+			if column.init_add_card(card):
 				numberOfCards -= 1
 				break

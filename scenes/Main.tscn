@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dfd2tfw68o2ux"]
+[gd_scene load_steps=6 format=3 uid="uid://dfd2tfw68o2ux"]
 
 [ext_resource type="Script" path="res://scenes/main/Main.gd" id="1_hlb0y"]
 [ext_resource type="PackedScene" uid="uid://g2nuhoxggfbc" path="res://entities/deck/deck.tscn" id="1_sy4w7"]
 [ext_resource type="PackedScene" uid="uid://cvb3wiqjkaev6" path="res://entities/draw/draw.tscn" id="2_crn01"]
 [ext_resource type="PackedScene" uid="uid://bdhpw3rbkwjsi" path="res://entities/column/column.tscn" id="4_h36u2"]
+[ext_resource type="PackedScene" uid="uid://dmw5teg818rpg" path="res://entities/stack/stack.tscn" id="5_vr0ds"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_hlb0y")
@@ -15,29 +16,41 @@ position = Vector2(31, 91)
 position = Vector2(31, 171)
 
 [node name="Column" parent="." instance=ExtResource("4_h36u2")]
-position = Vector2(105, 91)
-initialPos = 1
+position = Vector2(100, 91)
+id = 1
 
 [node name="Column2" parent="." instance=ExtResource("4_h36u2")]
-position = Vector2(149, 91)
-initialPos = 2
+position = Vector2(145, 91)
+id = 2
 
 [node name="Column3" parent="." instance=ExtResource("4_h36u2")]
-position = Vector2(195, 91)
-initialPos = 3
+position = Vector2(191, 91)
+id = 3
 
 [node name="Column4" parent="." instance=ExtResource("4_h36u2")]
-position = Vector2(238, 91)
-initialPos = 4
+position = Vector2(243, 91)
+id = 4
 
 [node name="Column5" parent="." instance=ExtResource("4_h36u2")]
-position = Vector2(281, 91)
-initialPos = 5
+position = Vector2(293, 91)
+id = 5
 
 [node name="Column6" parent="." instance=ExtResource("4_h36u2")]
-position = Vector2(319, 91)
-initialPos = 6
+position = Vector2(340, 91)
+id = 6
 
 [node name="Column7" parent="." instance=ExtResource("4_h36u2")]
-position = Vector2(353, 91)
-initialPos = 7
+position = Vector2(406, 91)
+id = 7
+
+[node name="Stack" parent="." instance=ExtResource("5_vr0ds")]
+position = Vector2(578, 77)
+
+[node name="Stack2" parent="." instance=ExtResource("5_vr0ds")]
+position = Vector2(578, 171)
+
+[node name="Stack3" parent="." instance=ExtResource("5_vr0ds")]
+position = Vector2(578, 244)
+
+[node name="Stack4" parent="." instance=ExtResource("5_vr0ds")]
+position = Vector2(578, 318)
