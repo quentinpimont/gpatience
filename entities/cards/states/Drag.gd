@@ -8,22 +8,18 @@ func update(_delta: float) -> void:
 		owner.position = owner.get_global_mouse_position() + owner.grabbed_offset
 
 func exit() -> void:
-	var bodies = owner.get_overlapping_areas()
-	print(bodies.size())
-	for body in bodies:
-		if body is Cards:
-			var target_parent = body.get_parent()
-			if target_parent.name.begins_with("Column"):
-				var owner_parent = owner.get_parent()
-				if owner.is_good_target(body):
-					if owner_parent is Column:
-						print(owner.followCards)
-						owner_parent.remove_cards(owner.followCards, target_parent.id)
-					elif owner_parent is Draw:
-						owner_parent.remove_card(target_parent.id)
-					print("Is good target")
-					owner.queue_free()
-					return
-	owner.reset_to_last_pos()
-	owner.followCards.clear()
 	owner.z_index = 0
+	var bodies = owner.get_overlapping_areas()
+	var parent = owner.get_parent().get_parent()
+	if owner.parent_name == parent.name:
+		for body in bodies:
+			if body is Stack or body is Column:
+				if owner.is_good_target(body):
+					if parent is Column:
+						parent.remove_cards(owner.followCards, body.id, body is Stack)
+					elif parent is Draw or parent is Stack:
+						parent.remove_card(body.id, body is Stack)
+					owner.followCards.clear()
+					return
+		owner.reset_to_last_pos()
+		owner.followCards.clear()

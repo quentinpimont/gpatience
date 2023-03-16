@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://entities/cards/states/Back.gd" id="4_pmtsr"]
 [ext_resource type="Script" path="res://entities/cards/states/Front.gd" id="5_kvopc"]
 [ext_resource type="Script" path="res://entities/cards/states/SemiHide.gd" id="6_1bqf5"]
-[ext_resource type="Script" path="res://StateMachine/state.gd" id="7_7tie7"]
+[ext_resource type="Script" path="res://entities/cards/states/Hide.gd" id="7_q54ym"]
 [ext_resource type="Script" path="res://entities/cards/states/Drag.gd" id="8_vua4r"]
 [ext_resource type="Script" path="res://entities/cards/states/Follow.gd" id="9_4i8qa"]
 
@@ -40,7 +40,7 @@ script = ExtResource("5_kvopc")
 script = ExtResource("6_1bqf5")
 
 [node name="Hide" type="Node" parent="StateMachie"]
-script = ExtResource("7_7tie7")
+script = ExtResource("7_q54ym")
 
 [node name="Drag" type="Node" parent="StateMachie"]
 script = ExtResource("8_vua4r")

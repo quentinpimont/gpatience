@@ -1,6 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmw5teg818rpg"]
+[gd_scene load_steps=4 format=3 uid="uid://dmw5teg818rpg"]
 
 [ext_resource type="Script" path="res://entities/stack/stack.gd" id="1_naq7k"]
+[ext_resource type="Texture2D" uid="uid://bntx02mph6xsh" path="res://card_base.png" id="2_3usll"]
 
-[node name="Stack" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_boabi"]
+size = Vector2(32, 44)
+
+[node name="Stack" type="Area2D"]
 script = ExtResource("1_naq7k")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_3usll")
+hframes = 13
+vframes = 5
+frame = 53
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_boabi")
+
+[node name="CardsContainer" type="Node2D" parent="."]

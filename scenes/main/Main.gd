@@ -10,7 +10,16 @@ extends Node2D
 	$Column6,
 	$Column7
 ]
+
+@onready var stacks: Array[Node] = [
+	$Stack,
+	$Stack2,
+	$Stack3,
+	$Stack4
+]
+
 func _ready() -> void:
+	EVENTS.check_win.connect(on_event_check_win)
 	cards_distribution()
 
 func cards_distribution() -> void:
@@ -21,3 +30,12 @@ func cards_distribution() -> void:
 			if column.init_add_card(card):
 				numberOfCards -= 1
 				break
+
+func on_event_check_win():
+	var response: bool = true
+	for stack in stacks:
+		if stack.cardInStack.size() < 13:
+			response = false
+			break
+	if response:
+		print("win")

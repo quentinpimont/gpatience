@@ -1,54 +1,62 @@
-extends Node2D
+extends Area2D
 class_name Column
 
 var cardInColumn: Array[Cards] = []
 var y_offset: int = 15
 @export var id: int = 0
+@onready var cardsContainer = $CardsContainer
+@onready var collisionShape = $CollisionShape2D
 
 func _ready() -> void:
 	EVENTS.add_card_in_column.connect(on_event_add_card_in_column)
 	EVENTS.add_one_card_in_column.connect(on_event_add_one_card_in_column)
 
 func remove_children() -> void:
-	for child in get_children():
-		remove_child(child)
+	for child in cardsContainer.get_children():
+		cardsContainer.remove_child(child)
 
-func draw_column() -> void:
+func resize_collision_shape():
+	var shapeTransform: Vector2 = Vector2.ZERO
+	var shapeSize: Vector2 = Vector2(32, 44)
+	if cardInColumn.size() > 1:
+		var offset = cardInColumn.size() - 1
+		shapeTransform.y = float((float(offset) * float(y_offset)) / 2.0)
+		shapeSize.y += offset * y_offset
+	collisionShape.position = shapeTransform
+	collisionShape.shape.size = shapeSize
+
+func draw() -> void:
 	remove_children()
-	if cardInColumn.size() == 0:
-		var empty_card = Utils.get_empty_card()
-		add_child(empty_card)
-		empty_card.state_machine.set_state("Front")
-	else:
-		for iCard in cardInColumn.size():
-			add_child(cardInColumn[iCard])
-			if Utils.is_last_element(cardInColumn, cardInColumn[iCard]):
-				cardInColumn[iCard].state_machine.set_state("Front")
-			else:
-				if cardInColumn[iCard].state_machine.get_state_name() == "Back" and cardInColumn[iCard].state_before_move != "":
-					cardInColumn[iCard].state_machine.set_state("SemiHide")
-				if cardInColumn[iCard].state_machine.get_state_name() == "Front":
-					cardInColumn[iCard].state_machine.set_state("SemiHide")
-
-func add_card(card: Cards):
-	card.position = Vector2(0, cardInColumn.size() * y_offset)
-	cardInColumn.push_back(card)
+	resize_collision_shape()
+	for iCard in cardInColumn.size():
+		cardsContainer.add_child(cardInColumn[iCard])
+		cardInColumn[iCard].position = Vector2(0, y_offset * iCard)
+		if Utils.is_last_element(cardInColumn, cardInColumn[iCard]) and cardInColumn[iCard].state_machine.get_state_name() != "Front":
+			cardInColumn[iCard].state_machine.set_state("Front")
+		else:
+			if cardInColumn[iCard].state_machine.get_state_name() == "Follow":
+				cardInColumn[iCard].state_machine.set_state("SemiHide")
+			if cardInColumn[iCard].state_machine.get_state_name() == "Front":
+				cardInColumn[iCard].state_machine.set_state("SemiHide")
 
 func init_add_card(card:Cards) -> bool:
 	var response = false
 	if cardInColumn.size() < id:
-		add_card(card)
+		cardInColumn.push_back(card)
 		if cardInColumn.size() == id:
-			draw_column()
+			draw()
 		response = true
 	return response
 
-func remove_cards(cardsIndex: Array[int], targetId: int):
+func remove_cards(cardsIndex: Array[int], targetId: int, target_is_stack: bool = false):
 	var cards: Array[Cards] = []
 	for index in cardsIndex:
 		cards.push_front(cardInColumn.pop_at(index))
-	draw_column()
-	EVENTS.add_card_in_column.emit(cards, targetId)
+	draw()
+	if target_is_stack:
+		EVENTS.add_card_in_stack.emit(cards[0], targetId)
+	else:
+		EVENTS.add_card_in_column.emit(cards, targetId)
 
 
 func get_follow_cards(card: Cards, grab_off: Vector2) -> Array[int]:
@@ -68,13 +76,11 @@ func on_event_add_card_in_column(cards: Array[Cards], targetId: int) -> void:
 	if targetId != id:
 		return
 	for card in cards:
-		var new_card: Cards = card.duplicate_card()
-		add_card(new_card)
-	draw_column()
+		cardInColumn.push_back(card)
+	draw()
 	
 func on_event_add_one_card_in_column(card: Cards, targetId: int) -> void:
 	if targetId != id:
 		return
-	var new_card: Cards = card.duplicate_card()
-	add_card(new_card)
-	draw_column()
+	cardInColumn.push_back(card)
+	draw()

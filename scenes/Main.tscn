@@ -45,12 +45,16 @@ id = 7
 
 [node name="Stack" parent="." instance=ExtResource("5_vr0ds")]
 position = Vector2(578, 77)
+id = 1
 
 [node name="Stack2" parent="." instance=ExtResource("5_vr0ds")]
 position = Vector2(578, 171)
+id = 2
 
 [node name="Stack3" parent="." instance=ExtResource("5_vr0ds")]
 position = Vector2(578, 244)
+id = 3
 
 [node name="Stack4" parent="." instance=ExtResource("5_vr0ds")]
 position = Vector2(578, 318)
+id = 4

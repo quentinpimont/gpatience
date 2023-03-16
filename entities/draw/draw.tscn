@@ -4,3 +4,5 @@
 
 [node name="Draw" type="Node2D"]
 script = ExtResource("1_puxjh")
+
+[node name="CardsContainer" type="Node2D" parent="."]

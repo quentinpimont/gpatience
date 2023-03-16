@@ -42,7 +42,7 @@ func _getFullcardInfos(infos: Dictionary, index: int) -> Dictionary:
 func _on_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_mask == 1:
 		if deckList.size() > 0:
-			var card: Cards = deckList.pop_back()
+			var card: Cards = deckList.pop_front()
 			EVENTS.draw.emit(card)
 			if deckList.size() == 0:
 				sprite.frame = 53
@@ -51,4 +51,5 @@ func _on_input_event(_viewport, event, _shape_idx):
 
 func on_reset_deck(cards:Array[Cards]) -> void:
 	deckList = cards
-	sprite.frame = 52
+	if deckList.size():
+		sprite.frame = 52

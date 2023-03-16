@@ -1,6 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdhpw3rbkwjsi"]
+[gd_scene load_steps=4 format=3 uid="uid://bdhpw3rbkwjsi"]
 
 [ext_resource type="Script" path="res://entities/column/column.gd" id="1_txlke"]
+[ext_resource type="Texture2D" uid="uid://bntx02mph6xsh" path="res://card_base.png" id="2_huy7u"]
 
-[node name="Column" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iauy3"]
+resource_local_to_scene = true
+size = Vector2(32, 44)
+
+[node name="Column" type="Area2D"]
 script = ExtResource("1_txlke")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_huy7u")
+hframes = 13
+vframes = 5
+frame = 53
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_iauy3")
+
+[node name="CardsContainer" type="Node2D" parent="."]
