@@ -3,6 +3,7 @@ class_name Deck
 
 var cardBase = preload("res://entities/cards/cards.tscn")
 var deckList: Array[Cards] = []
+var history: Dictionary = {}
 @onready var sprite = $Sprite2D
 
 # BUILT-IN
@@ -12,6 +13,7 @@ func _ready():
 	EVENTS.reset_deck.connect(on_reset_deck)
 
 # LOGIC
+
 func _shuffleCards():
 	for cardIndex in GAME.cardsInfos.size():
 		var cardInfo = _getFullcardInfos(GAME.cardsInfos[cardIndex], cardIndex)
@@ -38,9 +40,15 @@ func _getFullcardInfos(infos: Dictionary, index: int) -> Dictionary:
 		"number": number
 	}
 
+func redo(move_count_str: String) -> void:
+	if history.has(move_count_str):
+		deckList = history[move_count_str]
+		history.erase(move_count_str)
+
 # SIGNAL RESPONSES
 func _on_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_mask == 1:
+		history[str(GAME.get_move_count())] = deckList.duplicate(true)
 		if deckList.size() > 0:
 			var card: Cards = deckList.pop_front()
 			EVENTS.draw.emit(card)
@@ -48,6 +56,7 @@ func _on_input_event(_viewport, event, _shape_idx):
 				sprite.frame = 53
 		else:
 			EVENTS.deck_empty.emit()
+		GAME.set_move_count(GAME.move_count + 1)
 
 func on_reset_deck(cards:Array[Cards]) -> void:
 	deckList = cards

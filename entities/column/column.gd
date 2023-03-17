@@ -2,6 +2,7 @@ extends Area2D
 class_name Column
 
 var cardInColumn: Array[Cards] = []
+var history: Dictionary = {}
 var y_offset: int = 15
 @export var id: int = 0
 @onready var cardsContainer = $CardsContainer
@@ -31,12 +32,12 @@ func draw() -> void:
 	for iCard in cardInColumn.size():
 		cardsContainer.add_child(cardInColumn[iCard])
 		cardInColumn[iCard].position = Vector2(0, y_offset * iCard)
-		if Utils.is_last_element(cardInColumn, cardInColumn[iCard]) and cardInColumn[iCard].state_machine.get_state_name() != "Front":
+		if Utils.is_last_element(cardInColumn, cardInColumn[iCard]):
 			cardInColumn[iCard].state_machine.set_state("Front")
 		else:
-			if cardInColumn[iCard].state_machine.get_state_name() == "Follow":
-				cardInColumn[iCard].state_machine.set_state("SemiHide")
-			if cardInColumn[iCard].state_machine.get_state_name() == "Front":
+			if not cardInColumn[iCard + 1].is_good_target_for_column(cardInColumn[iCard]):
+				cardInColumn[iCard].state_machine.set_state("Back")
+			elif cardInColumn[iCard].state_machine.get_state_name() == "Follow" or cardInColumn[iCard].state_machine.get_state_name() == "Front":
 				cardInColumn[iCard].state_machine.set_state("SemiHide")
 
 func init_add_card(card:Cards) -> bool:
@@ -49,6 +50,7 @@ func init_add_card(card:Cards) -> bool:
 	return response
 
 func remove_cards(cardsIndex: Array[int], targetId: int, target_is_stack: bool = false):
+	history[str(GAME.get_move_count())] = cardInColumn.duplicate(true)
 	var cards: Array[Cards] = []
 	for index in cardsIndex:
 		cards.push_front(cardInColumn.pop_at(index))
@@ -58,6 +60,11 @@ func remove_cards(cardsIndex: Array[int], targetId: int, target_is_stack: bool =
 	else:
 		EVENTS.add_card_in_column.emit(cards, targetId)
 
+func redo(move_count_str: String) -> void:
+	if history.has(move_count_str):
+		cardInColumn = history[move_count_str]
+		history.erase(history[move_count_str])
+		remove_children()
 
 func get_follow_cards(card: Cards, grab_off: Vector2) -> Array[int]:
 	var followIndex: Array[int] = []
@@ -75,6 +82,7 @@ func get_follow_cards(card: Cards, grab_off: Vector2) -> Array[int]:
 func on_event_add_card_in_column(cards: Array[Cards], targetId: int) -> void:
 	if targetId != id:
 		return
+	history[str(GAME.get_move_count())] = cardInColumn.duplicate(true)
 	for card in cards:
 		cardInColumn.push_back(card)
 	draw()
@@ -82,5 +90,6 @@ func on_event_add_card_in_column(cards: Array[Cards], targetId: int) -> void:
 func on_event_add_one_card_in_column(card: Cards, targetId: int) -> void:
 	if targetId != id:
 		return
+	history[str(GAME.get_move_count())] = cardInColumn.duplicate(true)
 	cardInColumn.push_back(card)
 	draw()

@@ -1,7 +1,6 @@
 extends Area2D
 class_name Cards
 
-var card_base = preload("res://entities/cards/cards.tscn")
 var color: String = ""
 var signCard: String = ""
 var number: int = 0
@@ -16,15 +15,15 @@ var parent_name: String
 @onready var collisionShape = $CollisionShape2D
 
 func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton and event.is_pressed() and (state_machine.get_state_name() == "Front" or state_machine.get_state_name() == "SemiHide"):
+	if event is InputEventMouseButton and event.double_click and state_machine.get_state_name() == "Front":
+		print("double click")
+		state_machine.set_state("Autoplacement")
+	elif event is InputEventMouseButton and event.is_pressed() and (state_machine.get_state_name() == "Front" or state_machine.get_state_name() == "SemiHide"):
 		state_machine.set_state("Drag")
-	if event is InputEventMouseButton and event.double_click:
-		print(event)
 	if event is InputEventMouseButton and not event.is_pressed() and state_machine.get_state_name() == "Drag":
 		state_machine.set_state(state_machine.get_previous_state())
 
 func start_drag():
-	z_index = 1
 	lastPosition = position
 	grabbed_offset = position - get_global_mouse_position()
 	var parent = get_parent().get_parent()
@@ -50,7 +49,7 @@ func is_good_target(containerTarget) -> bool:
 		if cards.size() > 0:
 			var targetCard: Cards = cards[cards.size() - 1]
 			var good_number: int = number - 1
-			if (number == 1 and targetCard.color == "EMPTY") or (targetCard.number == good_number and signCard == targetCard.signCard):
+			if (targetCard.number == good_number and signCard == targetCard.signCard):
 				response = true
 		else:
 			if number == 1:
@@ -59,10 +58,15 @@ func is_good_target(containerTarget) -> bool:
 		var cards: Array[Cards] = containerTarget.cardInColumn
 		if cards.size() > 0:
 			var targetCard: Cards = cards[cards.size() - 1]
-			var good_number: int = number + 1
-			if color != targetCard.color and good_number == targetCard.number:
-				response = true
+			response = is_good_target_for_column(targetCard)
 		else:
 			if number == 13:
 				response = true
+	return response
+
+func is_good_target_for_column(targetCard: Cards) -> bool:
+	var response = false
+	var good_number: int = number + 1
+	if color != targetCard.color and good_number == targetCard.number:
+		response = true
 	return response

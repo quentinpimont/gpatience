@@ -1,14 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1hxgulamvjer"]
+[gd_scene load_steps=13 format=3 uid="uid://cykirmvxs88vb"]
 
 [ext_resource type="Script" path="res://entities/cards/Cards.gd" id="1_5fbhp"]
 [ext_resource type="Texture2D" uid="uid://bntx02mph6xsh" path="res://card_base.png" id="2_58rhi"]
 [ext_resource type="Script" path="res://StateMachine/state_machine.gd" id="3_7kkmt"]
+[ext_resource type="Script" path="res://entities/cards/states/Init.gd" id="4_28erh"]
 [ext_resource type="Script" path="res://entities/cards/states/Back.gd" id="4_pmtsr"]
 [ext_resource type="Script" path="res://entities/cards/states/Front.gd" id="5_kvopc"]
 [ext_resource type="Script" path="res://entities/cards/states/SemiHide.gd" id="6_1bqf5"]
 [ext_resource type="Script" path="res://entities/cards/states/Hide.gd" id="7_q54ym"]
 [ext_resource type="Script" path="res://entities/cards/states/Drag.gd" id="8_vua4r"]
 [ext_resource type="Script" path="res://entities/cards/states/Follow.gd" id="9_4i8qa"]
+[ext_resource type="Script" path="res://entities/cards/states/Autoplacement.gd" id="10_se5jb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_71knd"]
 resource_local_to_scene = true
@@ -30,6 +32,9 @@ shape = SubResource("RectangleShape2D_71knd")
 [node name="StateMachie" type="Node" parent="."]
 script = ExtResource("3_7kkmt")
 
+[node name="Init" type="Node" parent="StateMachie"]
+script = ExtResource("4_28erh")
+
 [node name="Back" type="Node" parent="StateMachie"]
 script = ExtResource("4_pmtsr")
 
@@ -47,3 +52,6 @@ script = ExtResource("8_vua4r")
 
 [node name="Follow" type="Node" parent="StateMachie"]
 script = ExtResource("9_4i8qa")
+
+[node name="Autoplacement" type="Node" parent="StateMachie"]
+script = ExtResource("10_se5jb")

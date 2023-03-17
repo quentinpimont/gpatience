@@ -1,6 +1,7 @@
 extends State
 
 func enter() -> void:
+	owner.z_index = 1
 	owner.start_drag()
 
 func update(_delta: float) -> void:
@@ -19,6 +20,7 @@ func exit() -> void:
 						parent.remove_cards(owner.followCards, body.id, body is Stack)
 					elif parent is Draw or parent is Stack:
 						parent.remove_card(body.id, body is Stack)
+					GAME.set_move_count(GAME.move_count + 1)
 					owner.followCards.clear()
 					return
 		owner.reset_to_last_pos()
